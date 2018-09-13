@@ -17,34 +17,33 @@ RUN    sudo apt-get update -qq \
 RUN sudo pip3 install notebook jupyterlab_launcher jupyterlab traitlets ipython vdom
 
 RUN    cd /home/gap/inst/ \
-    && rm -rf gap4r8 \
-    && wget -q https://github.com/gap-system/gap/archive/stable-4.9.zip \
-    && unzip -q stable-4.9.zip \
-    && rm stable-4.9.zip \
-    && cd gap-stable-4.9 \
+    && wget -q https://github.com/gap-system/gap/archive/stable-4.10.zip \
+    && unzip -q stable-4.10.zip \
+    && rm stable-4.10.zip \
+    && cd gap-stable-4.10 \
     && ./autogen.sh \
     && ./configure \
     && make \
     && mkdir pkg \
     && cd pkg \
-    && wget -q https://www.gap-system.org/pub/gap/gap4pkgs/packages-stable-4.9.tar.gz \
-    && tar xzf packages-stable-4.9.tar.gz \
-    && rm packages-stable-4.9.tar.gz \
+    && wget -q https://www.gap-system.org/pub/gap/gap4pkgs/packages-stable-4.10.tar.gz \
+    && tar xzf packages-stable-4.10.tar.gz \
+    && rm packages-stable-4.10.tar.gz \
     && ../bin/BuildPackages.sh \
     && cd JupyterKernel-* \
     && python3 setup.py install --user
 
 RUN jupyter serverextension enable --py jupyterlab --user
 
-ENV PATH /home/gap/inst/gap-stable-4.9/pkg/JupyterKernel-0.99999/bin:${PATH}
-ENV JUPYTER_GAP_EXECUTABLE /home/gap/inst/gap-stable-4.9/bin/gap.sh
+ENV PATH /home/gap/inst/gap-stable-4.10/pkg/JupyterKernel-0.999999/bin:${PATH}
+ENV JUPYTER_GAP_EXECUTABLE /home/gap/inst/gap-stable-4.10/bin/gap.sh
 
 # Set up new user and home directory in environment.
 # Note that WORKDIR will not expand environment variables in docker versions < 1.3.1.
 # See docker issue 2637: https://github.com/docker/docker/issues/2637
 USER gap
 ENV HOME /home/gap
-ENV GAP_HOME /home/gap/inst/gap-stable-4.9
+ENV GAP_HOME /home/gap/inst/gap-stable-4.10
 ENV PATH ${GAP_HOME}/bin:${PATH}
 
 # Start at $HOME.
